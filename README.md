@@ -59,6 +59,14 @@ a road to fortune
     git push
     #拉取远程分支最新的提交到本地：
     git pull
+
+    #推送到主分支（main 或 master）
+    git push origin main
+    #推送到其他分支
+    git push origin feature-branch
+    #推送本地分支到远程的新分支(没有已存在的就新建，-u提供绑定)
+    git push -u origin my-local-branch
+    git push -u origin my-local-branch:remote-branch-name
     ```
 8. 大多数操作可以利用GitLens进行可视化操作。
 9. > [B站教程](https://www.bilibili.com/video/BV1db4y1d79C/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=cc0f1a739a49e6242d2584c6f680be01)
