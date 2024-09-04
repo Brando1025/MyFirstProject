@@ -1,11 +1,11 @@
 # MyFirstProject
 a road to fortune
 
-- [ ] git & github
+- [x] git & github
 - [x] dependence
-- [ ] .gitignore
-- [ ] pytest
-- [ ] LICENSE
+- [x] .gitignore
+- [x] pytest
+- [x] LICENSE
 - [ ] CI/CD
 - [ ] setup.cfg
 - [ ] pre-commit
@@ -13,7 +13,6 @@ a road to fortune
 - [ ] makefile
 - [ ] markdown
 ## About Git & GitHub
-### Basic Concepts & Git Installation
 1. git的安装可以绑定到vscode中，这样方便我们直接在vscode中进行git操作，并且vscode有许多方便的git插件。
 2. 好用的插件：**GitLens**
 3. 当我们使用`git clone`或者`git pull`可以得到一个*库*。用 **.git**文件夹（一般是隐藏的）来进行管理的本地版本控制。
@@ -85,6 +84,9 @@ a road to fortune
 
 - **相对于*requirement.txt*，*environment.yml*可以包含conda和pip安装的，但前者只能查找出pip安装的。**
 
+## .gitignore
+- github可以自动生成模板
+
 ## Pytest
 - pytest
   - 测试目标：
@@ -104,6 +106,9 @@ a road to fortune
     - 文件名符合，函数或者类的命名不符合也不会执行
   - **@pytest.fixture 装饰器**：用于定义夹具，用于准备和清理测试所需的资源。只有需要提供特殊功能（如资源准备或清理）的函数才需要使用这个装饰器。普通的测试函数不需要这个装饰器。
 - report of pytest
-  - pytest.ini
-  - setup.cfg
-  - pytest --report=report.html --title=测试报告 --tester=Brando --desc=FirstProject  --template=2
+  - 自动生成测试报告，pytest-testreport，pytest-html，allure-pytest。以下使用pytest-testreport（和html包会起冲突）；allure需要下载软件。
+  - pytest.ini和setup.cfg，以上两种方式可以为pytest配置一些初始化参数，规整后续可能用到pytest时（如CI/CD）的格式。
+- `pytest --report=report.html --title=测试报告 --tester=Brando --desc=FirstProject  --template=2`
+
+## LICENSE
+- MIT和APACHE都是都是比较宽松的协议
