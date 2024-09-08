@@ -2,7 +2,7 @@ import pytest
 import cv2
 import numpy as np
 import os
-import awesome_template
+import python_framework_template.frame_template.awesome_template as awesome_template
 
 # 假设测试图像路径
 TEST_IMAGE_PATH = "assets/test.jpg"

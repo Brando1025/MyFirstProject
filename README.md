@@ -6,11 +6,12 @@ a road to fortune
 - [x] .gitignore
 - [x] pytest
 - [x] LICENSE
+- [x] __init__.py
 - [ ] CI/CD
 - [ ] setup.cfg
 - [ ] pre-commit
 - [ ] docker
-- [ ] makefile
+- [x] makefile
 - [ ] markdown
 - [ ] .pyc & Cython
 ## About Git & GitHub
@@ -153,3 +154,11 @@ a road to fortune
 Tab 缩进只用于每一行命令的开头，并不是命令中的参数之间用 Tab 隔开。）
   - 依赖项可以直接写一行，如：all: format lint test success
   - 执行全部直接用`make`(他的前提是将全部任务整合成一个新的任务，并放在第一个，因为`make`默认执行第一条。),执行特定任务使用`make <task_name>`。
+  - `.PHONY: test`这种语法可以规避一些冲突风险，比如我有一个test命令，但同时我也有一个test的文件存在，这个时候就会出现冲突了。这时候.PHONY就可以规避掉这个问题。这个可以写在第一行，make依然会自动执行第一个命令。
+
+## \_\_init__.py
+- 在老版本python里，\_\_init__.py是作为一个标志，声明python文件夹为一个包，内容是空的就可以。
+- 但是为什么新版还在用呢？一方面是为了兼容性，另一方面是为了导出使用更加的方便。详情可以看顶层的python_framework_template和math_toolkits的\_\_init__.py文件。他们通过init的初始化，让main.py可以直接`from python_framework_template import add_numbers`。减少了导入复杂度。
+- 可以写一些初始设置，方便测试。
+
+## setup.py

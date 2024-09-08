@@ -1,3 +1,5 @@
+.PHONY: all format lint test success
+
 all: format lint test success
 
 format:
