@@ -8,12 +8,15 @@ a road to fortune
 - [x] LICENSE
 - [x] __init__.py
 - [ ] CI/CD
-- [ ] setup.cfg
+- [x] setup.py & pyproject.toml
 - [ ] pre-commit
 - [ ] docker
 - [x] makefile
 - [ ] markdown
 - [ ] .pyc & Cython
+- [ ] 其他
+  - [ ] 建立新仓库
+  - [ ] fork与branch
 ## About Git & GitHub
 1. git的安装可以绑定到vscode中，这样方便我们直接在vscode中进行git操作，并且vscode有许多方便的git插件。
 2. 好用的插件：**GitLens**
@@ -161,4 +164,44 @@ Tab 缩进只用于每一行命令的开头，并不是命令中的参数之间�
 - 但是为什么新版还在用呢？一方面是为了兼容性，另一方面是为了导出使用更加的方便。详情可以看顶层的python_framework_template和math_toolkits的\_\_init__.py文件。他们通过init的初始化，让main.py可以直接`from python_framework_template import add_numbers`。减少了导入复杂度。
 - 可以写一些初始设置，方便测试。
 
-## setup.py
+## setup.py & pyproject.toml
+就现在而言，pyproject.toml以及逐渐替代setup.py，他有更清晰的格式，同时也可以管理发布PyPI的配置。  
+Poetry 是一个非常流行的 Python 依赖管理和打包工具，它能够自动生成 pyproject.toml 文件，并简化项目的创建、依赖管理、打包和发布流程。  
+1. 安装。
+   1. `pip install poetry`
+2. 配置
+   1. 对于全新项目
+      1. `poetry new your_project_name`
+   2. 对于已有项目
+      1. `poetry init`
+3. 关于依赖(可选)
+   1. 可以不绑定依赖（我喜欢分开管理）
+      1. 对于已有环境配置文件：`poetry add $(cat requirements.txt)`
+      2. 对于单独的依赖：`poetry add <package_name>`
+4. 构建项目
+   1. `poetry build`
+   2. 会同时生成sdist，wheel包
+      1. sdist：原始代码包，适合需要编译的项目。
+      2. wheel:编译后的二进制包，适合无需编译即可安装的项目。
+5. 发布到 PyPI
+   1. poetry publish流
+      1. `poetry publish --build`此命令会重新build
+      2. `poetry publish --build --repository testpypi`测试服
+   2. twine流 
+      1. `pip install twine`
+      2. `twine upload dist/*`
+      3. `twine upload --repository-url https://test.pypi.org/legacy/ dist/*`
+6. 验证发布
+   1. 正式：`pip install your_project_name`
+   2. 测试：`pip install --index-url https://test.pypi.org/simple/ your_project_name
+`  
+
+poetry publish与twine的差别：
+![alt text](assets/README/image.png)
+## 其他
+### 建立新仓库
+1. **git clone**
+2. 本地创建仓库后再推送到GitHub
+3. 在GitHub上fork（派生）一个现有的项目并克隆
+4. 创建一个裸仓库
+### fork&branch
