@@ -6,8 +6,15 @@ authors = ["BB"]
 license = "MIT"
 readme = "README.md"
 
+packages = [
+    { include = "math_toolkits", from = "python_framework_template"}
+]
+
 [tool.poetry.dependencies]
 python = "^3.11"
+
+[tool.black]
+line-length = 80
 
 
 [build-system]

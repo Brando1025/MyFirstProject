@@ -1,9 +1,12 @@
-import pytest
+import os
+
 import cv2
 import numpy as np
-import os
-import python_framework_template.frame_template.awesome_template as awesome_template
+import pytest
 
+# fmt: off
+from python_framework_template.frame_template import awesome_template
+# fmt: on
 # 假设测试图像路径
 TEST_IMAGE_PATH = "assets/test.jpg"
 OUTPUT_IMAGE_PATH = "output.png"
@@ -46,7 +49,11 @@ def test_output_image_creation():
         output[mask] = np.random.randint(0, 255, size=3, dtype=np.uint8)
 
     assert output is not None, "输出图像创建失败"
-    assert output.shape == (image.shape[0], image.shape[1], 3), "输出图像尺寸不正确"
+    assert output.shape == (
+        image.shape[0],
+        image.shape[1],
+        3,
+    ), "输出图像尺寸不正确"
 
 
 def test_output_image_saving():

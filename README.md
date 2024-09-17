@@ -9,14 +9,14 @@ a road to fortune
 - [x] __init__.py
 - [ ] CI/CD
 - [x] setup.py & pyproject.toml
-- [ ] pre-commit
+- [x] pre-commit
 - [ ] docker
 - [x] makefile
-- [ ] markdown
+- [x] markdown
 - [ ] .pyc & Cython
-- [ ] 其他
-  - [ ] 建立新仓库
-  - [ ] fork与branch
+- [x] 其他
+  - [x] 建立新仓库
+  - [x] fork与branch
 ## About Git & GitHub
 1. git的安装可以绑定到vscode中，这样方便我们直接在vscode中进行git操作，并且vscode有许多方便的git插件。
 2. 好用的插件：**GitLens**
@@ -128,6 +128,25 @@ a road to fortune
 ## LICENSE
 - MIT和APACHE都是都是比较宽松的协议
 
+## pre-commit
+Pre-commit 是一个用于管理和运行 Git hooks 的工具，Git hooks 是在特定的 Git 操作（如 commit、push 等）时自动执行的脚本。Pre-commit 可以确保在代码提交前执行特定的代码检查、格式化或验证操作，从而提高代码质量并确保团队协作中遵守一致的代码规范。  
+
+- Pre-commit 的作用：
+  - 自动运行代码质量检查，如代码格式、静态分析、语法检查等。
+  - 防止不符合规范的代码被提交。
+  - 在提交之前自动修复代码（如自动格式化）。
+  - 可以整合多个检查工具，自动执行一系列代码质量保障任务。
+- 步骤
+  - 安装`pip install pre-commit`
+  - 配置 .pre-commit-config.yaml 文件。`pre-commit sample-config > .pre-commit-config.yaml`
+  当然也可以找模板
+    - 模板更新`pre-commit autoupdate`
+  - 安装 pre-commit 钩子`pre-commit install`
+  - 运行 pre-commit
+    - git commit时会自动触发
+    - 也可以手动运行`pre-commit run --all-files`
+- 与Makefile的不同
+  - 整体来说主要是执行的时间点不同，并且makefile除了检查也可以用来构建，功能更全面一点
 ## Makefile
 ### 简单的说就是一套自动化工具。它不专门针对 Python 项目，而是通用的自动化工具，可以用在任何类型的项目中，包括 Python、C++、JavaScript 等。它通常用于简化日常的开发操作，如安装依赖、运行测试、清理临时文件等。
 - 由于Python 是解释型语言，代码不需要编译成可执行文件。Makefile 在 Python 项目中的作用通常是为了自动化常见的开发任务，比如创建虚拟环境、安装依赖、运行测试、格式化代码等。Makefile 更多的是起到简化项目管理和开发者任务的作用。
@@ -158,7 +177,8 @@ Tab 缩进只用于每一行命令的开头，并不是命令中的参数之间�
   - 依赖项可以直接写一行，如：all: format lint test success
   - 执行全部直接用`make`(他的前提是将全部任务整合成一个新的任务，并放在第一个，因为`make`默认执行第一条。),执行特定任务使用`make <task_name>`。
   - `.PHONY: test`这种语法可以规避一些冲突风险，比如我有一个test命令，但同时我也有一个test的文件存在，这个时候就会出现冲突了。这时候.PHONY就可以规避掉这个问题。这个可以写在第一行，make依然会自动执行第一个命令。
-
+  - makefile种的一些格式化工具，会有默认的参数，**但当你又一些特殊文件时，他们会查找这些文件里的参数**，例如：black会找pyproject.toml、flake8会这setup
+  - 过长折行用\;# noqa: F401可以忽略空导入
 ## \_\_init__.py
 - 在老版本python里，\_\_init__.py是作为一个标志，声明python文件夹为一个包，内容是空的就可以。
 - 但是为什么新版还在用呢？一方面是为了兼容性，另一方面是为了导出使用更加的方便。详情可以看顶层的python_framework_template和math_toolkits的\_\_init__.py文件。他们通过init的初始化，让main.py可以直接`from python_framework_template import add_numbers`。减少了导入复杂度。
@@ -183,6 +203,11 @@ Poetry 是一个非常流行的 Python 依赖管理和打包工具，它能够�
    2. 会同时生成sdist，wheel包
       1. sdist：原始代码包，适合需要编译的项目。
       2. wheel:编译后的二进制包，适合无需编译即可安装的项目。
+   3. 这里需要注意的是，需要打包的字段需要通过packages编辑。简单来说，Poetry 能够自动识别包的前提是代码包名和 pyproject.toml 中的 name 字段一致，并且代码包位于项目根目录下或符合 Poetry 的默认项目结构约定。但如果name字段与需要打包的文件不同或者有多个需要打包的文件夹，则需要packages字段。  `# 指定多个包及其路径
+    packages = [
+        { include = "mypackage1", from = "src/core/subpackage1" },
+        { include = "mypackage2", from = "src/core/subpackage2" }
+    ] `
 5. 发布到 PyPI
    1. poetry publish流
       1. `poetry publish --build`此命令会重新build
@@ -198,10 +223,145 @@ Poetry 是一个非常流行的 Python 依赖管理和打包工具，它能够�
 
 poetry publish与twine的差别：
 ![alt text](assets/README/image.png)
+
+## Markdown 
+<details>
+<summary>展开查看Markdown使用，对照原md文件查看</summary>
+
+# Markdown
+## BrandoBa
+### Markdown all in one
+### github style preview
+---
+## 快捷键
+**ctrl+b**  
+*ctrl+I*
+# ctrl+shift+]
+# ctrl+shift 组合[ or ]来输入输出#
+$ctrl+M$输出单行公式
+$$
+ctrl+ M M输出模式块 
+$$
+~~Alt+s~~
+
+Test
+一个Enter
+---
+Test
+
+两个Enter
+***
+Test  
+两个空格一个Enter
+
+>这是一个引用
+echo 'export PATH="~/anaconda3/bin:$PATH"' >> ~/.bashrc
+echo 'source ~/anaconda3/bin/activate' >> ~/.bashrc
+source ~/.bashrc  
+>
+>下一段引用  
+>>引用中的引用
+>- 也可以加入其他
+
+## 分割
+***斜线加粗***
++ 加号列表
++ 1
+  
+    缩进一个Tab
+
++ 3
+
+* 星号列表
+  
+    >块
+
+* end
+- 减号列表
+  - 内部
+    - 再内部
+- 不同符号可以分组无序列表
+- zheshishenme 
+- [OpenAI](https://www.openai.com "一个开源团队")
+- ![Dog](lianjie)
+- <https://123.com>
+- [![以图片为链接](/assets/img/shiprock.jpg "Shiprock")](123)
+
+一级
+===
+二级
+---
+
+    代码块
+        可以
+            直接用缩进
+    end         
+
+```
+也可以用~
+```
+```python
+print("这种三点式围栏可以附加语言种类")
+```
+&copy;
+
+4 < 5
+
+This is a regular paragraph.
+
+<table>
+    <tr>
+        <td>Foo</td>
+    </tr>
+</table>
+
+This is another regular paragraph.
+
+| name | Age |Sex|
+|---|:------:|---|
+| bb   | 27  |male|
+
+Here's a simple footnote[^1] and here's a longer one.[^bignote]
+
+[^1]: www.baidu.com
+- [ ] 任务列表
+- [x] Alt+C 可以快捷check X
+  - [ ] 子任务
+
+目录链接
+- [开始位置](#markdown)
+  - [二级](#分割)
+
+</details>
+
 ## 其他
 ### 建立新仓库
 1. **git clone**
+   1. 先在github上建立仓库
+   2. 本地clone，如果配置过SSH，最好使用SSH
 2. 本地创建仓库后再推送到GitHub
+   1. 先在github上建立仓库
+   2. `git init`
+   3. `git add .`  
+      `git commit -m "Initial commit"`   
+   4. `git remote add origin https://github.com/yourusername/my-local-project.git`
+   5. `git push -u origin master`
 3. 在GitHub上fork（派生）一个现有的项目并克隆
+   1. fork别人的项目到自己的仓库
+   2. 然后`git clone`
 4. 创建一个裸仓库
+   1. 通常是作为自己的服务器用，详情再查
 ### fork&branch
+Fork 和 Branch 是 Git 和 GitHub 中常见的操作，它们都涉及代码版本管理，但用途和操作方式不同。下面是它们的区别：  
+- **Fork 和 Branch 的差异总结**：
+  - Fork：
+    - 在 GitHub 级别，复制整个项目到你自己的账户下。
+    - 用于基于他人项目开发，适合贡献开源项目。
+    - 独立于原始项目，不同仓库之间没有自动同步。
+  - Branch：
+    - 在同一个仓库内部创建并行开发线。
+    - 用于同一项目的不同任务或功能开发。
+    - 分支之间可以轻松合并，并且共享相同的提交历史。
+- **场景对比**：
+  - 如果你想对一个开源项目进行修改，并可能向原项目提交更改，你会 fork 该项目，然后在你自己账户下的副本中工作。
+  - 如果你在自己项目中开发新功能或修复 bug，你会 branch 主分支以便进行并行开发。
