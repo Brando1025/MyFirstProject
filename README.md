@@ -13,7 +13,7 @@ a road to fortune
 - [ ] docker
 - [x] makefile
 - [x] markdown
-- [ ] .pyc & Cython
+- [x] .pyc & Cython
 - [x] 其他
   - [x] 建立新仓库
   - [x] fork与branch
@@ -333,6 +333,35 @@ Here's a simple footnote[^1] and here's a longer one.[^bignote]
   - [二级](#分割)
 
 </details>
+
+## .pyc & Cython
+- .pyc
+  - 什么是 .pyc 文件？
+    - .pyc 文件是 Python 源代码（.py 文件）编译后的字节码文件。当你运行一个 Python 程序时，解释器会将 .py 文件编译成字节码，并将其存储在 .pyc 文件中。这有助于加快程序的启动速度，因为下次运行时可以直接加载字节码而无需重新编译。
+  - .pyc 文件的作用
+    - 加快加载速度：避免每次运行程序时都重新编译源代码。
+    - 代码保护：虽然 .pyc 文件不是完全的保护措施，但相比 .py 文件，源码不易被直接查看。
+  - 如何生成 .pyc 文件？
+    - 自动生成在__pycache__ 目录下
+  - 独立性
+    - pyc可以脱离源码执行，但是对编译环境和依赖要求敏感
+- Cython
+  - 什么是 Cython？
+    - Cython 是一种编程语言，它是 Python 的超集，允许你编写类似 Python 的代码，并将其编译为 C 或 C++ 代码，从而大幅提升代码的执行速度。Cython 特别适用于需要高性能计算的场景，如数值计算、图像处理等。
+  - 为什么使用 Cython？
+    - 性能提升：通过编译为 C 代码，Cython 可以显著加快代码执行速度，特别是在循环和数学计算密集的部分。
+    - 与 C/C++ 集成：Cython 允许你方便地调用 C/C++ 库，扩展 Python 的功能。
+    - 静态类型声明：通过在代码中声明变量类型，进一步优化性能。
+    - 优化方案需要详细学习，一般是变量
+- Cython安装与使用
+  - `pip install cython`
+  - 编写.pyx
+  - 编写辅助编译的py文件
+  - 编译文件`python setup.py build_ext --inplace`
+  - 编译之后会生成pyd或者so可以用来调用
+- 一些细节与对比
+  - ![alt text](assets/README/image-1.png)
+  - ![alt text](assets/README/image-2.png)
 
 ## 其他
 ### 建立新仓库
