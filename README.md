@@ -147,6 +147,99 @@ Pre-commit 是一个用于管理和运行 Git hooks 的工具，Git hooks 是在
     - 也可以手动运行`pre-commit run --all-files`
 - 与Makefile的不同
   - 整体来说主要是执行的时间点不同，并且makefile除了检查也可以用来构建，功能更全面一点
+
+## docker
+Docker 是一个应用打包、分发、部署的工具  
+你也可以把它理解为一个轻量的虚拟机，它只虚拟你软件需要的运行环境，多余的一点都不要，而普通虚拟机则是一个完整而庞大的系统，包含各种不管你要不要的软件。
+- 与普通虚拟机对比
+  - ![alt text](assets/README/image-3.png)
+- 打包、分发、部署
+  - 打包：就是把你软件运行所需的依赖、第三方库、软件打包到一起，变成一个安装包
+  - 分发：你可以把你打包好的“安装包”上传到一个镜像仓库，其他人可以非常方便的获取和安装
+  - 部署：拿着“安装包”就可以一个命令运行起来你的应用，自动模拟出一摸一样的运行环境，不管是在 Windows/Mac/Linux。
+- **镜像、容器**
+  - 镜像：可以理解为软件安装包，可以方便的进行传播和安装。
+  - 容器：软件安装后的状态，每个软件运行环境都是独立的、隔离的，称之为容器。
+- **镜像库与安装**
+  - [镜像仓库](https://hub.docker.com)
+  - `docker-compose up -d`会默认找docker-compose.yml或yaml
+  - （npm平等与pip，pip install默认找package.json）
+  - (FROM拉不下来可以先docker pull单独下来)
+- dockerfile语法
+  - FROM：定义了基础镜像。
+  - ADD：复制主机上的代码到容器中。
+    - ADD 用于将本地文件或远程文件复制到镜像中，还支持自动解压归档文件。
+    - COPY 只能从本地文件系统复制文件。
+  - WORKDIR：设置了工作目录。
+  - RUN：安装应用依赖，并使用了特定的 npm 源。
+    - RUN 是在构建镜像时执行的命令，用来执行某些操作并将其结果写入镜像层中。典型用法包括安装软件包、配置环境等。
+    - 这些命令在构建过程中执行，完成后生成新的镜像层。
+    - 比如 RUN npm install 安装依赖并将其存储在镜像里，确保容器运行时依赖已经安装。
+  - CMD：定义了容器启动时执行的命令，启动应用程序。
+    - CMD 是在容器启动时运行的命令，用于指定容器启动后默认执行的任务。它通常用来定义程序的入口点，比如启动服务器或运行应用程序。
+    - CMD 是容器启动时运行，而 RUN 是镜像构建时运行。
+    - 每个 Dockerfile 只能有一个 CMD，如果有多个 CMD，则只有最后一个会生效。
+    - **在容器实际启动时生效**
+  - LABEL: 元数据
+  - EXPOSE：声明容器监听的端口，比如 EXPOSE 3000，用于指定应用程序使用的网络端口。
+  - ENV：用于设置环境变量，例如 ENV NODE_ENV production。
+  - VOLUME：声明一个挂载点，以便将本地文件系统中的目录挂载到容器里。
+- 构建新镜像
+  - `docker build -t test:v1 .`
+    - docker build: 根据dockerfile构建镜像
+    - -t test:v1：-t是用来指定名称和版本标签
+    - .: 在本目录下查找
+  - `docker images`可以查看已有镜像
+- 关于镜像层
+  - 镜像层具有缓存机制，没改就调用缓存 不会重新执行
+  - 怎么会看有没有改呢？只检查本句的文件，比如package引用a文件，a文件改了，copy package .不会发现。
+  - `docker build --no-cache -t my-app .`**从头构建**
+  - 尽量把改动少的放在前面
+  - COPY . . 只复制和之前有差别的文件，一样的就不懂了
+- 运行
+  - `docker run -p 8080:8080 --name test-hello test:v1`
+- 更多相关命令
+  - `docker ps` 查看当前运行中的容器
+  - `docker images` 查看镜像列表
+  - `docker rm container-id` 删除指定 id 的容器
+  - `docker stop/start container-id` 停止/启动指定 id 的容器
+  - `docker rmi image-id` 删除指定 id 的镜像
+  - `docker volume ls` 查看 volume 列表
+  - `docker network ls` 查看网络列表
+  - 在后台运行只需要加一个 -d 参数`docker-compose up -d`
+  - 查看运行状态：`docker-compose ps`
+  - 停止运行：`docker-compose stop`
+  - 重启：`docker-compose restart`
+  - 重启单个服务：`docker-compose restart service-name`
+  - 进入容器命令行：`docker-compose exec service-name sh`
+  - 查看容器运行log：`docker-compose logs [service-name]`
+  - ![alt text](assets/README/image-6.png)
+- 挂载
+  - 方便改变
+  - bind mount和volume两种 第一种绝对路径，第二个起个名就行
+  - `docker run -p 8080:8080 --name test-hello -v D:/code:/app -d test:v1`
+  - ![alt text](assets/README/image-4.png)
+- 多docker通信
+  - `docker network create test-net`创建一个网络
+  - `docker run -d --name redis --network test-net --network-alias redis redis:latest`创建容器时使用网络，并起别名（**这个别名本质上是对容器起别名，是当前网络中，此容器的别名**）
+  - `docker run -p 8080:8080 --name test -v D:/test:/app --network test-net -d test:v1`同样使用这个网络，但是由于不需要再为别人提供网络接口所以不用起别名
+- docker-compose简化多容器服务
+  - ![alt text](assets/README/image-5.png)
+  - 目的是为了快速一键启动多个容器
+  - 需要注意**挂载卷**，需要在最后显式定义，比如两个都挂载到redis，如果没有显式定义，那么他们不会公用一个redis
+  - 一个docker-compose下自动使用一个网络
+  - 使用`docker-compose up -d`启动
+- docker的发布
+  1. 注册&创建镜像库
+  2. `docker login -u username`
+  3. `docker tag test:v1 username/test:v1`
+  4. `docker push username/test:v1`
+  5. `docker run -dp 8080:8080 username/test:v1`
+- 备份和迁移数据
+  - 主要的是通过新建一个中间ubuntu docker来转移中间文件
+- [视频教程](https://www.bilibili.com/video/BV11L411g7U1/?spm_id_from=333.337.search-card.all.click&vd_source=cc0f1a739a49e6242d2584c6f680be01)
+- [doc教程](https://docker.easydoc.net/doc/81170005/cCewZWoN/lTKfePfP)
+
 ## Makefile
 ### 简单的说就是一套自动化工具。它不专门针对 Python 项目，而是通用的自动化工具，可以用在任何类型的项目中，包括 Python、C++、JavaScript 等。它通常用于简化日常的开发操作，如安装依赖、运行测试、清理临时文件等。
 - 由于Python 是解释型语言，代码不需要编译成可执行文件。Makefile 在 Python 项目中的作用通常是为了自动化常见的开发任务，比如创建虚拟环境、安装依赖、运行测试、格式化代码等。Makefile 更多的是起到简化项目管理和开发者任务的作用。
